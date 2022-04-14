@@ -39,6 +39,7 @@ def getPriceViaSteamApis(name):
             raise Exception("AddFundsException")
     except KeyError:
         price = response.json()['median_avg_prices_15days'][-1][1]
+        print(name, price)
         return round(price, 2)
 
 

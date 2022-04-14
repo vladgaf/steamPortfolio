@@ -26,12 +26,10 @@ def refreshInventory(user_id):
             raw_item = {"quantity": inventoryDict[key], "boughtPrice": 0}
         try:
             Item.select().where(Item.itemName == str(key)).get()
-            print(Item.select().where(Item.itemName == str(key)))
+            #print(Item.select().where(Item.itemName == str(key)))
         except (DoesNotExist, IndexError):
             Item.createItem(name=key, price=CurrentPriceParser.parseItemPrice(key))
         finally:
             user = User.select(User).where(User.id == user_id).get()
             item = Item.select().where(Item.itemName == str(key)).get()
             UserItem.createUserItem(user=user, item=item, quantity=raw_item["quantity"], boughtprice=raw_item["boughtPrice"])
-
-refreshInventory(1)
