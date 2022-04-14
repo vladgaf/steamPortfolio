@@ -22,7 +22,6 @@ def parseUserItems():
             userItem = UserItem()
             user = User.select(User).where(User.userProfile == steam_id64).get()
             item = Item.select().where(Item.itemName == str(item_name)).get()
-            userItem.createUserItem(user, item, itemsDict[item_name])
+            userItem.createUserItem(user, item, itemsDict[item_name], None)
 
-
-parseUserItems()
+#parseUserItems()

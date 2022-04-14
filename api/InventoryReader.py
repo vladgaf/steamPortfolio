@@ -44,5 +44,5 @@ def getInventoryArray(steam_id64):
                         itemsList.append(request['descriptions'][k]['market_hash_name'])
 
     itemsArray = dict((x, itemsList.count(x)) for x in set(itemsList))
-    print(itemsArray)
+    #print(itemsArray)
     return itemsArray

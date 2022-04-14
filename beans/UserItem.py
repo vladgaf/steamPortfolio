@@ -15,19 +15,20 @@ class UserItem(Model):
     class Meta:
         database = pg_db
 
-    def createUserItem(self, user, item, quantity):
+    def createUserItem(user, item, quantity, boughtprice):
         userItem = UserItem()
         userItem.user = user
         userItem.item = item
         userItem.quantity = quantity
-        #userItem.boughtPrice = 0.0 # ограничение notNull он совсем ебанулся?
+        userItem.boughtPrice = boughtprice # ограничение notNull он совсем ебанулся?
         userItem.save()
 
         return userItem
 
-    def updateBoughtPrice(self, boughtPrice):
-        self.boughtPrice = boughtPrice
-        self.save()
+    def updateBuyPrice(buy_price, user_id, item_id):
+        query = UserItem.update({"buy_price": buy_price}).where(UserItem.user == user_id, UserItem.item == item_id)
+        print(query.sql)
+        return query.execute()
 
     def getUserItems(id):
         try:
@@ -41,7 +42,8 @@ class UserItem(Model):
         except DoesNotExist:
             print("NotFound")
 
-    def getUserItem(self, steamid_64, name):
-        userItemsDict = self.getUserItems(steamid_64)
+
+
+
 
 

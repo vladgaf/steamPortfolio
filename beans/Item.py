@@ -10,7 +10,7 @@ class Item(Model):
     class Meta:
         database = pg_db
 
-    def createItem(self, name, price):
+    def createItem(name, price):
         item = Item()
         item.itemName = name
         item.currentPrice = price
