@@ -20,7 +20,7 @@ def profileLinkToSteamId64():
             request_profile = requests.get(url=url_profile, headers=Constants.HEADERS)
             doc = xml_md.parse(io.StringIO(request_profile.content.decode("utf-8")))
             steam_id64 = doc.getElementsByTagName('steamID64')[0].childNodes[0].nodeValue
-            #print(steam_id64)
+            print(steam_id64)
             user = User()
             if not User.select().where(User.userProfile == steam_id64).exists():
                 user.createUser(steam_id64)
@@ -28,18 +28,6 @@ def profileLinkToSteamId64():
         except BaseException:
             correct_link = False
             print(Fore.RED + "Incorrect link, try again.")
-        # except requests.exceptions.MissingSchema:
-        #     correct_link = False
-        #     print(Fore.RED + "Incorrect link, try again.")
-        # except requests.exceptions.ProxyError:
-        #     correct_link = False
-        #     print(Fore.RED + "Incorrect link, try again.")
-        # except UnboundLocalError:
-        #     correct_link = False
-        #     print(Fore.RED + "Incorrect link, try again.")
-        # except requests.exceptions.InvalidURL:
-        #     correct_link = False
-        #     print(Fore.RED + "Incorrect link, try again.")
     return steam_id64
 
 

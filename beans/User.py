@@ -13,3 +13,7 @@ class User(Model):
         user.userProfile = profile
         user.save()
         return user
+
+    def getUserBySteamId64(steam_Id64):
+        user = User.select(User).where(User.userProfile == steam_Id64).get()
+        return user

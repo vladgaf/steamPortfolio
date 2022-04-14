@@ -17,5 +17,9 @@ class Item(Model):
         item.save()
         return item
 
+    def getItemByName(name):
+        item = Item.select(Item).where(Item.itemName == name).get()
+        return item
+
 
 
