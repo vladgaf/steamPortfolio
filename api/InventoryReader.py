@@ -8,26 +8,29 @@ from beans.User import User
 from utils import Constants
 
 
+def validateLink(link):
+    try:
+        url_profile = link + '?xml=1'
+        request_profile = requests.get(url=url_profile, headers=Constants.HEADERS)
+        doc = xml_md.parse(io.StringIO(request_profile.content.decode("utf-8")))
+        steam_id64 = doc.getElementsByTagName('steamID64')[0].childNodes[0].nodeValue
+        return link
+    except BaseException:
+        return False
 
-def profileLinkToSteamId64():
-    print(Fore.BLUE + "Paste your profile link, for example:\nhttps://steamcommunity.com"
-                      "/id/yourcustomid/\nhttps://steamcommunity.com"
-                      "/profiles/7*************/")
-    correct_link = False
-    while not correct_link:
-        try:
-            url_profile = input() + '?xml=1'
-            request_profile = requests.get(url=url_profile, headers=Constants.HEADERS)
-            doc = xml_md.parse(io.StringIO(request_profile.content.decode("utf-8")))
-            steam_id64 = doc.getElementsByTagName('steamID64')[0].childNodes[0].nodeValue
-            print(steam_id64)
-            user = User()
-            if not User.select().where(User.userProfile == steam_id64).exists():
-                user.createUser(steam_id64)
-            correct_link = True
-        except BaseException:
-            correct_link = False
-            print(Fore.RED + "Incorrect link, try again.")
+
+def profileLinkToSteamId64(link):
+    try:
+        url_profile = link + '?xml=1'
+        request_profile = requests.get(url=url_profile, headers=Constants.HEADERS)
+        doc = xml_md.parse(io.StringIO(request_profile.content.decode("utf-8")))
+        steam_id64 = doc.getElementsByTagName('steamID64')[0].childNodes[0].nodeValue
+        print(steam_id64)
+        user = User()
+        if not User.select().where(User.userProfile == steam_id64).exists():
+            user.createUser(steam_id64)
+    except BaseException:
+        print(Fore.RED + "Incorrect link, try again.")
     return steam_id64
 
 

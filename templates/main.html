@@ -1,0 +1,12 @@
+{%extends 'base.html'%}
+{%block main%}
+     <form action="" method="post">
+          <input type="text" name="steamLink" placeholder ="Your SteamID">
+          <input type = "submit" value="Load" title="Check">
+          {% if message %}
+          <p>{{ message }}</p>
+    {% endif %}
+     </form>
+{%block table%}
+{%endblock%}
+{%endblock%}

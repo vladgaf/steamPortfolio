@@ -12,7 +12,7 @@ def parseUserItems():
     steam_id64 = InventoryReader.profileLinkToSteamId64()
     itemsDict = InventoryReader.getInventoryArray(steam_id64)
     for item_name in itemsDict.keys():
-        print(item_name)
+        #print(item_name)
         try:
             Item.select(Item).where(Item.itemName == str(item_name)).get()
         except DoesNotExist:
