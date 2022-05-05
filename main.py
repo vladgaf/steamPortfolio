@@ -29,18 +29,28 @@ def foo():
             return render_template("main.html", message=Constants.INCORRECT_LINK_MESSAGE)
 
 
-@app.route("/<int:steamID64>")
+@app.route("/<int:steamID64>", methods=['GET', 'POST'])
 def usertable(steamID64):
-    user = User.getUserBySteamId64(steamID64)
-    userItems = UserItem.getUserItems(User.id)
-    for item in userItems:
-        del item["user"]
-        del item["item"]
-        del item['userProfile']
-        del item["id"]
-        print(item)
-    #return render_template("table.html", tables=[df.to_html(classes='data')], titles=df.columns.values)
-    return render_template("table.html", userItems = userItems)
+    if request.method == "GET":
+        user = User.getUserBySteamId64(steamID64)
+        userItems = UserItem.getUserItems(User.id)
+        #for item in userItems:
+        #     del item["user"]
+        #     del item["item"]
+        #     del item['userProfile']
+        #     del item["id"]
+        #    print(item)
+        return render_template("table.html", userItems = userItems)
+    if request.method == "POST":
+        # print("Name:" + request.form.get('itemName'))
+        # print("BP:" + request.form.get('boughtPrice'))
+        user = User.getUserBySteamId64(steamID64)
+        item = Item.getItemByName(request.form.get('itemName'))
+        bought_price = float(request.form.get('boughtPrice'))
+        UserItem.updateBuyPrice(bought_price, user.id, item.id)
+        userItems = UserItem.getUserItems(User.id)
+        return render_template("table.html", userItems=userItems)
+
 
 
 if __name__ == '__main__':

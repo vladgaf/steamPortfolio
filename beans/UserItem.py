@@ -26,7 +26,7 @@ class UserItem(Model):
         return userItem
 
     def updateBuyPrice(buy_price, user_id, item_id):
-        query = UserItem.update({"buy_price": buy_price}).where(UserItem.user == user_id, UserItem.item == item_id)
+        query = UserItem.update({"boughtPrice": buy_price}).where(UserItem.user == user_id, UserItem.item == item_id)
         print(query.sql)
         return query.execute()
 

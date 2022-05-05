@@ -6,23 +6,29 @@
         <th>Name</th>
         <th>Quantity</th>
         <th>Bought for</th>
+        <th>Total Invested</th>
         <th>Current price</th>
+        <th>Total Worth</th>
+        <th>Difference</th>
     </tr>
   </thead>
   <tbody>
    {% for item in userItems %}
    <tr>
-       <td> {{ item["itemName"] }} </td>
+       <form name = '{{item["id"]}}' action="" method="post">
+       <td> <input type="text" name= "itemName" value='{{ item["itemName"] }}' readonly> </td>
        <td> {{ item["quantity"] }} </td>
-       <!--<td> {{ item["boughtPrice"] }} </td>-->
-       <td> <form>
-           <input type="text" value = '{{ item["boughtPrice"] }}' >
+       <td>
+           <input type="text" name= "boughtPrice" value = '{{ item["boughtPrice"] }}' >
            <input type="submit" value="Save">
-           </form>
        </td>
+       </form>
+       <td>{{item["quantity"] * item["boughtPrice"]}}</td>
        <td> {{ item["currentPrice"] }} </td>
-       {%endfor%}
+       <td>{{item["quantity"] * item["currentPrice"]}}</td>
+       <td>{{ item["quantity"] * item["currentPrice"] - item["quantity"] * item["boughtPrice"] }} </td>
    </tr>
+  {%endfor%}
   </tbody>
 </table>
 {%endblock%}
