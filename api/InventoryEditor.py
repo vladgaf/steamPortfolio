@@ -3,13 +3,13 @@ from beans.User import User
 from beans.UserItem import UserItem
 from peewee import DoesNotExist
 
-import InventoryReader
-import CurrentPriceParser
-import InventoryParser
+from api import InventoryReader
+from api import CurrentPriceParser
+from api import InventoryParser
 
 
 def refreshInventory(user_id):
-    queryList = UserItem.getUserItems(1)
+    queryList = UserItem.getUserItems(user_id)
     queryDict = {}
     for item in queryList:
         queryDict[item['itemName']] = {"quantity": item['quantity'], "boughtPrice": item['boughtPrice']}
@@ -30,6 +30,7 @@ def refreshInventory(user_id):
         except (DoesNotExist, IndexError):
             Item.createItem(name=key, price=CurrentPriceParser.parseItemPrice(key))
         finally:
+            userItem = UserItem()
             user = User.select(User).where(User.id == user_id).get()
             item = Item.select().where(Item.itemName == str(key)).get()
-            UserItem.createUserItem(user=user, item=item, quantity=raw_item["quantity"], boughtprice=raw_item["boughtPrice"])
+            UserItem.createUserItem(userItem, user=user, item=item, quantity=raw_item["quantity"], boughtprice=raw_item["boughtPrice"])

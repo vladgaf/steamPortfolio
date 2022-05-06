@@ -15,12 +15,16 @@ class UserItem(Model):
     class Meta:
         database = pg_db
 
-    def createUserItem(user, item, quantity, boughtprice):
+    def createUserItem(self, user, item, quantity, boughtprice):
         userItem = UserItem()
         userItem.user = user
         userItem.item = item
         userItem.quantity = quantity
         userItem.boughtPrice = boughtprice # ограничение notNull он совсем ебанулся?
+        print(user)
+        print(item.itemName)
+        print(quantity)
+        print(boughtprice)
         userItem.save()
 
         return userItem

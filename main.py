@@ -1,4 +1,7 @@
 from api import InventoryReader
+from api import InventoryParser
+from api import InventoryEditor
+from api import ItemsBaseEditor
 from utils import Constants
 from api import *
 from peewee import *
@@ -29,27 +32,38 @@ def foo():
             return render_template("main.html", message=Constants.INCORRECT_LINK_MESSAGE)
 
 
+@app.route("/", methods=['post', 'get'])
 @app.route("/<int:steamID64>", methods=['GET', 'POST'])
 def usertable(steamID64):
+    user = User.getUserBySteamId64(steamID64)
     if request.method == "GET":
-        user = User.getUserBySteamId64(steamID64)
-        userItems = UserItem.getUserItems(User.id)
-        #for item in userItems:
-        #     del item["user"]
-        #     del item["item"]
-        #     del item['userProfile']
-        #     del item["id"]
-        #    print(item)
+        #print(type(steamID64))
+        userItems = UserItem.getUserItems(user.id)
+        if not userItems:
+            print("ParsingItems")
+            InventoryParser.parseUserItems(steamID64)
+            userItems = UserItem.getUserItems(user.id)
+        #print(*userItems, sep='\n')
         return render_template("table.html", userItems = userItems)
     if request.method == "POST":
-        # print("Name:" + request.form.get('itemName'))
-        # print("BP:" + request.form.get('boughtPrice'))
-        user = User.getUserBySteamId64(steamID64)
-        item = Item.getItemByName(request.form.get('itemName'))
-        bought_price = float(request.form.get('boughtPrice'))
-        UserItem.updateBuyPrice(bought_price, user.id, item.id)
-        userItems = UserItem.getUserItems(User.id)
-        return render_template("table.html", userItems=userItems)
+        print()
+        if 'refreshInventory' in request.form:
+            InventoryEditor.refreshInventory(user.id)
+            userItems = UserItem.getUserItems(user.id)
+            return render_template("table.html", userItems=userItems)
+        elif 'refreshPrices' in request.form:
+            ItemsBaseEditor.refreshAllPrices()
+            userItems = UserItem.getUserItems(user.id)
+            return render_template("table.html", userItems=userItems)
+        else:
+            # print("Name:" + request.form.get('itemName'))
+            # print("BP:" + request.form.get('boughtPrice'))
+            user = User.getUserBySteamId64(steamID64)
+            item = Item.getItemByName(request.form.get('itemName'))
+            bought_price = float(request.form.get('boughtPrice'))
+            UserItem.updateBuyPrice(bought_price, user.id, item.id)
+            userItems = UserItem.getUserItems(user.id)
+            return render_template("table.html", userItems=userItems)
 
 
 

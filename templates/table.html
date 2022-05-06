@@ -1,5 +1,9 @@
 {%extends "main.html"%}
 {%block table%}
+<form name = 'refreshValues' action="" method="post">
+    <input type="submit" name = "refreshInventory" value="refreshInventory">
+    <input type="submit" name = "refreshPrices" value="refreshPrices">
+</form>
 <table>
   <thead>
     <tr>
@@ -25,7 +29,7 @@
        </form>
        <td>{{item["quantity"] * item["boughtPrice"]}}</td>
        <td> {{ item["currentPrice"] }} </td>
-       <td>{{item["quantity"] * item["currentPrice"]}}</td>
+       <td>{{ item["quantity"] * item["currentPrice"]|round(2, 'floor')}}</td>
        <td>{{ item["quantity"] * item["currentPrice"] - item["quantity"] * item["boughtPrice"] }} </td>
    </tr>
   {%endfor%}

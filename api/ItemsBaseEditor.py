@@ -3,8 +3,8 @@ from beans.User import User
 from beans.UserItem import UserItem
 from peewee import DoesNotExist
 
-import InventoryReader
-import CurrentPriceParser
+from api import InventoryReader
+from api import CurrentPriceParser
 
 
 def refreshAllPrices():

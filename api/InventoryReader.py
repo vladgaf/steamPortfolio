@@ -36,7 +36,7 @@ def profileLinkToSteamId64(link):
 
 def getInventoryArray(steam_id64):
     global itemsList
-    url = 'https://steamcommunity.com/inventory/' + steam_id64 + '/730/2'
+    url = 'https://steamcommunity.com/inventory/' + str(steam_id64) + '/730/2'
     request = requests.get(url=url, headers=Constants.HEADERS).json()
     if request is not None or request.json()["success"] is not False:
         itemsList = []
