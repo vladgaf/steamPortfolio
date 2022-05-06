@@ -9,14 +9,14 @@
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ">
             <li>
                 <div class="nav-link px-2 text-white">
-                    <div class="fs-4 text-white">{{ totalInvested }}</div>
+                    <div class="fs-4 text-white">{{ totalInvested|round(2, 'floor') }}</div>
                     <div class="fs-6 text-white-50">Total invested:</div>
                 </div>
             </li>
 
             <li>
                 <div class="nav-link px-2 text-white">
-                    <div class="fs-4 text-white">{{ totalWorthNow }}</div>
+                    <div class="fs-4 text-white">{{ totalWorthNow|round(2, 'floor')  }}</div>
                     <div class="fs-6 text-white-50">Total worth now:</div>
                 </div>
             </li>
@@ -60,6 +60,7 @@
         <th scope="col">Current price</th>
         <th scope="col">Total Worth</th>
         <th scope="col">Difference</th>
+        <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
@@ -107,6 +108,7 @@
            </svg>
            {{ (item["quantity"] * item["currentPrice"] - item["quantity"] * item["boughtPrice"])|round(2, 'floor') }} </td>
        {%endif%}
+       <td><a href="">Details</a> </td>
    </tr>
   {%endfor%}
   </tbody>

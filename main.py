@@ -48,11 +48,15 @@ def usertable(steamID64):
         if 'refreshInventory' in request.form:
             InventoryEditor.refreshInventory(user.id)
             userItems = UserItem.getUserItems(user.id)
-            return render_template("table.html", userItems=userItems)
+            totalInvested = InventoryEditor.getTotalInvested(user.id)
+            totalWorthNow = InventoryEditor.getTotalWorthNow(user.id)
+            return render_template("table.html", userItems=userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
         elif 'refreshPrices' in request.form:
             ItemsBaseEditor.refreshAllPrices()
             userItems = UserItem.getUserItems(user.id)
-            return render_template("table.html", userItems=userItems)
+            totalInvested = InventoryEditor.getTotalInvested(user.id)
+            totalWorthNow = InventoryEditor.getTotalWorthNow(user.id)
+            return render_template("table.html", userItems=userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
         else:
             # print("Name:" + request.form.get('itemName'))
             # print("BP:" + request.form.get('boughtPrice'))
@@ -65,7 +69,10 @@ def usertable(steamID64):
             totalWorthNow = InventoryEditor.getTotalWorthNow(user.id)
             return render_template("table.html", userItems=userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
 
-
+@app.route("/<string:itemName>")
+def itemStats():
+    if request.method == 'GET':
+        render_template()
 
 if __name__ == '__main__':
     app.run(debug=True,  host="0.0.0.0", port=8000)
