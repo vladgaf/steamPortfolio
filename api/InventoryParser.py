@@ -28,5 +28,6 @@ def parseUserItems(steam_id64):
             userItem.createUserItem(user, item, itemsDict[item_name], 0.0)
 
 
+
 # InventoryReader.profileLinkToSteamId64("https://steamcommunity.com/profiles/76561198308132032")
 # parseUserItems(76561198308132032)

@@ -2,7 +2,7 @@ from beans.Item import Item
 from beans.User import User
 from beans.UserItem import UserItem
 from peewee import DoesNotExist
-
+from peewee import fn
 from api import InventoryReader
 from api import CurrentPriceParser
 from api import InventoryParser
@@ -34,3 +34,8 @@ def refreshInventory(user_id):
             user = User.select(User).where(User.id == user_id).get()
             item = Item.select().where(Item.itemName == str(key)).get()
             UserItem.createUserItem(userItem, user=user, item=item, quantity=raw_item["quantity"], boughtprice=raw_item["boughtPrice"])
+
+def getTotalInvested(user_id):
+    sum = UserItem.select(fn.SUM(UserItem.boughtPrice)).where(UserItem.user == user_id).dicts().get()
+    return sum['sum']
+

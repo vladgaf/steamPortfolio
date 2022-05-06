@@ -63,7 +63,8 @@ def usertable(steamID64):
             bought_price = float(request.form.get('boughtPrice'))
             UserItem.updateBuyPrice(bought_price, user.id, item.id)
             userItems = UserItem.getUserItems(user.id)
-            return render_template("table.html", userItems=userItems)
+            totalInvested = InventoryEditor.getTotalInvested(user.id)
+            return render_template("table.html", userItems=userItems, totalInvested=totalInvested)
 
 
 

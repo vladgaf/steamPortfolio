@@ -49,3 +49,4 @@ def getInventoryArray(steam_id64):
     itemsArray = dict((x, itemsList.count(x)) for x in set(itemsList))
     #print(itemsArray)
     return itemsArray
+

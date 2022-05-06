@@ -1,12 +1,20 @@
 {%extends 'base.html'%}
 {%block main%}
-     <form action="" method="post">
-          <input type="text" name="steamLink" placeholder ="Your SteamID">
-          <input type = "submit" value="Load" title="Check">
-          {% if message %}
-          <p>{{ message }}</p>
-    {% endif %}
-     </form>
-{%block table%}
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold text-light">Поставьте пятерку</h1>
+    <div class="col-lg-6 mx-auto">
+      <p class="lead mb-4 text-light">Жмайлов Борис Борисович хороший человек и лучший преподаватель</p>
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <form class="form-group mx-sm-3 mb-2" action="" method="post">
+            <input class="sr-only" type="text" name="steamLink" placeholder ="Your SteamID">
+            <input class="btn btn-primary mb-2" type = "submit" value="Load" title="Check">
+            {% if message %}
+            <p>{{ message }}</p>
+            {% endif %}
+                    </form>
+      </div>
+    </div>
+  </div>
+    {%block table%}
 {%endblock%}
 {%endblock%}
