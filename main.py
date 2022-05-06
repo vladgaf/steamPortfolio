@@ -14,10 +14,6 @@ from beans.Item import Item
 app = Flask(__name__)
 
 
-
-dictionary = {'quantity': 1, 'boughtPrice': 0.0, 'itemName': 'Souvenir Sawed-Off | Irradiated Alert (Battle-Scarred)', 'currentPrice': 0.39}
-
-
 @app.route("/", methods=['post', 'get'])
 def foo():
     if request.method == 'GET':
@@ -44,7 +40,9 @@ def usertable(steamID64):
             InventoryParser.parseUserItems(steamID64)
             userItems = UserItem.getUserItems(user.id)
         #print(*userItems, sep='\n')
-        return render_template("table.html", userItems = userItems)
+        totalInvested = InventoryEditor.getTotalInvested(user.id)
+        totalWorthNow = InventoryEditor.getTotalWorthNow(user.id)
+        return render_template("table.html", userItems = userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
     if request.method == "POST":
         print()
         if 'refreshInventory' in request.form:
@@ -64,7 +62,8 @@ def usertable(steamID64):
             UserItem.updateBuyPrice(bought_price, user.id, item.id)
             userItems = UserItem.getUserItems(user.id)
             totalInvested = InventoryEditor.getTotalInvested(user.id)
-            return render_template("table.html", userItems=userItems, totalInvested=totalInvested)
+            totalWorthNow = InventoryEditor.getTotalWorthNow(user.id)
+            return render_template("table.html", userItems=userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
 
 
 

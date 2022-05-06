@@ -1,25 +1,42 @@
 {%extends "main.html"%}
 {%block table%}
-    <div class="p-3 bg-dark text-white">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
           <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
         </a>
-        <!--<div class="p-3 mb-2 bg-secondary text-white justify-content-center mb-md-0">
-            Total invested: {% if totalInvested %}
-            <p CLASS="nav-link px-2 text-secondary">{{ totalInvested }}</p>
-                {% endif %}</li>
-        </div>-->
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li>
+                <div class="nav-link px-2 text-white">
+                    <div class="fs-4 text-white">{{ totalInvested }}</div>
+                    <div class="fs-6 text-white-50">Total invested:</div>
+                </div>
+            </li>
+
+            <li>
+                <div class="nav-link px-2 text-white">
+                    <div class="fs-4 text-white">{{ totalWorthNow }}</div>
+                    <div class="fs-6 text-white-50">Total worth now:</div>
+                </div>
+            </li>
+
+            <li>
+                <div class="nav-link px-2 text-white">
+                    <div class="fs-4 text-white">{{ (totalWorthNow - totalInvested)|round(2, 'floor') }}</div>
+                    <div class="fs-6 text-white-50">Difference:</div>
+                </div>
+            </li>
+        </ul>
+
+
         <div class="text-end">
             <form name = 'refreshValues' action="" method="post">
-                <input type="submit" class="btn btn-outline-light me-2" name = "refreshInventory" value="refreshInventory">
-                <input type="submit" class="btn btn-outline-light me-2" name = "refreshPrices" value="refreshPrices">
+                <input type="submit" class="btn btn-outline-light me-2" name = "refreshInventory" value="Refresh inventory">
+                <input type="submit" class="btn btn-outline-light me-2" name = "refreshPrices" value="Refresh prices">
             </form>
         </div>
       </div>
-    </div>
-  </div>
 
 <table class="table table-dark">
   <thead>
@@ -50,8 +67,8 @@
        </form>
        <td>{{item["quantity"] * item["boughtPrice"]}}</td>
        <td> {{ item["currentPrice"] }} </td>
-       <td>{{ item["quantity"] * item["currentPrice"]|round(2, 'floor')}}</td>
-       <td>{{ item["quantity"] * item["currentPrice"] - item["quantity"] * item["boughtPrice"] }} </td>
+       <td>{{ (item["quantity"] * item["currentPrice"])|round(2, 'floor')}}</td>
+       <td>{{ (item["quantity"] * item["currentPrice"] - item["quantity"] * item["boughtPrice"])|round(2, 'floor') }} </td>
    </tr>
   {%endfor%}
   </tbody>

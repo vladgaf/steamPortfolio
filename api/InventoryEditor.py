@@ -1,7 +1,7 @@
 from beans.Item import Item
 from beans.User import User
 from beans.UserItem import UserItem
-from peewee import DoesNotExist
+from peewee import DoesNotExist, JOIN
 from peewee import fn
 from api import InventoryReader
 from api import CurrentPriceParser
@@ -39,3 +39,8 @@ def getTotalInvested(user_id):
     sum = UserItem.select(fn.SUM(UserItem.boughtPrice)).where(UserItem.user == user_id).dicts().get()
     return sum['sum']
 
+def getTotalWorthNow(user_id):
+    query = UserItem.select(fn.SUM(Item.currentPrice)).join(Item, on=(Item.id == UserItem.item)).where(UserItem.user==user_id).dicts().get()
+    return query['sum']
+
+#getTotalWorthNow(1)
