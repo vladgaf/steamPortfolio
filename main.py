@@ -104,9 +104,19 @@ def itemStats(itemName):
         return render_template("itempage.html", max=max_chart_value, itemName = itemName, title = "PriceGraph",
                                labels=bar_labels, values=bar_values, averagePrice = average_price, currentPrice = current_price, marketLink = market_link)
 
+
 @app.route('/database', methods=['GET', 'POST'])
 def database():
-    return render_template('database.html')
+    if request.method == 'GET':
+        return render_template('database.html')
+    if request.method == 'POST':
+        itemName = request.form.get('itemName')
+        try:
+            item = Item.getItemByName(itemName)
+            return redirect(url_for('itemStats', itemName=request.form.get('itemName')))
+        except BaseException:
+            return render_template('database.html', message = Constants.INCORRECT_ITEM_MESSAGE)
+    return
 
 if __name__ == '__main__':
     app.run(debug=True,  host="0.0.0.0", port=8000)

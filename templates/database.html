@@ -2,16 +2,20 @@
 {%block database%}
 <div class="px-4 py-5 my-5 text-center" id="header">
     <div class="col-lg-6 mx-auto">
-      <p class="lead mb-4 text-light">Search an custom item:</p>
-      <div class="d-grid gap-2 d-flex justify-content-center">
-          <form class="d-flex form-inline mx-sm-3" action="" method="post">
-            <input class="form-control mb-2 mr-6" type="text" name="itemName" id ="itemNameInput" placeholder ="Item name...">
-            <input class="btn btn-primary mb-2 ml-2" type = "submit" value="Load" title="Check">
-            {% if message %}
+        <p class="lead mb-4 text-light">Search an custom item:</p>
+        <div class="d-grid gap-2 d-flex justify-content-center">
+            <form class="d-flex form-inline mx-sm-3" action="" method="post">
+                <input class="form-control mb-2 mr-6" type="text" name="itemName" id="itemNameInput"
+                       placeholder="Item name...">
+
+                <input class="btn btn-primary mb-2 ml-2" type="submit" value="Load" title="Check">
+            </form>
+        </div>
+        {% if message %}
+        <div class="item text-danger bg-dark my-auto">
             <p>{{ message }}</p>
-            {% endif %}
-          </form>
-      </div>
+        </div>
+        {% endif %}
     </div>
-  </div>
+</div>
 {%endblock%}

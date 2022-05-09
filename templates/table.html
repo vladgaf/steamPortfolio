@@ -1,64 +1,60 @@
 {%extends "main.html"%}
 {%block table%}
-<script src="{{url_for('static', filename = 'scripts/modal.js')}}"></script>
+
 <div class="tableWrapper">
 
-
-    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start bg-dark">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-                <use xlink:href="#bootstrap"></use>
-            </svg>
-        </a>
-
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ">
-            <li>
-                <div class="nav-link px-2 text-white">
-                    <div class="fs-4 text-white">{{ totalInvested|round(2, 'floor') }}</div>
-                    <div class="fs-6 text-white-50">Total invested:</div>
-                </div>
-            </li>
-
-            <li>
-                <div class="nav-link px-2 text-white">
-                    <div class="fs-4 text-white">{{ totalWorthNow|round(2, 'floor') }}</div>
-                    <div class="fs-6 text-white-50">Total worth now:</div>
-                </div>
-            </li>
-
-            <li>
-                <div class="nav-link px-2 text-white">
-                    {%if (totalWorthNow - totalInvested) > 0 %}
-                    <div class="fs-4 text-success">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-arrow-up-square" viewBox="0 0 16 16">
-                            <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                        </svg>
-                        {{ (totalWorthNow - totalInvested)|round(2, 'floor') }}
+    <div class="d-flex justify-content-around text-white bg-dark">
+        <div class="mr-auto p-2 bd-highlight">
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ">
+                <li>
+                    <div class="nav-link px-2 text-white">
+                        <div class="fs-4 text-white">{{ totalInvested|round(2, 'floor') }}</div>
+                        <div class="fs-6 text-white-50">Total invested:</div>
                     </div>
-                    {%else%}
-                    <div class="fs-4 text-danger">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-arrow-down-square" viewBox="0 0 16 16">
-                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                        </svg>
-                        {{ (totalWorthNow - totalInvested)|round(2, 'floor') }}
+                </li>
+
+                <li>
+                    <div class="nav-link px-2 text-white">
+                        <div class="fs-4 text-white">{{ totalWorthNow|round(2, 'floor') }}</div>
+                        <div class="fs-6 text-white-50">Total worth now:</div>
                     </div>
-                    {%endif%}
-                    <div class="fs-6 text-white-50">Difference:</div>
-                </div>
-            </li>
-        </ul>
+                </li>
 
-
-        <div class="text-end">
-            <form name='refreshValues' action="" method="post">
-                <input type="submit" class="btn btn-outline-light me-2" name="refreshInventory"
-                       value="Refresh inventory">
-                <input type="submit" class="btn btn-outline-light me-2" name="refreshPrices" value="Refresh prices">
-            </form>
+                <li>
+                    <div class="nav-link px-2 text-white">
+                        {%if (totalWorthNow - totalInvested) > 0 %}
+                        <div class="fs-4 text-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-arrow-up-square" viewBox="0 0 16 16">
+                                <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                            </svg>
+                            {{ (totalWorthNow - totalInvested)|round(2, 'floor') }}
+                        </div>
+                        {%else%}
+                        <div class="fs-4 text-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-arrow-down-square" viewBox="0 0 16 16">
+                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                            </svg>
+                            {{ (totalWorthNow - totalInvested)|round(2, 'floor') }}
+                        </div>
+                        {%endif%}
+                        <div class="fs-6 text-white-50">Difference:</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="p-2 bd-highlight">
+            <div class="text-end">
+                <form name='refreshValues' action="" method="post">
+                    <input type="submit" class="btn btn-outline-light me-2 inventoryControls" name="refreshInventory"
+                           value="Refresh inventory" >
+                    <input type="submit" class="btn btn-outline-light me-2 inventoryControls" name="refreshPrices" value="Refresh prices">
+                </form>
+            </div>
         </div>
     </div>
+
 
     <table class="table table-striped table-dark">
         <thead class="thead-dark mb-2">

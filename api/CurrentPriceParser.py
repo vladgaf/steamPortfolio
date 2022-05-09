@@ -1,6 +1,10 @@
+import datetime
+
 import requests
 import json
 import urllib.parse
+from datetime import date
+
 from colorama import Fore, Back, Style
 from utils import Constants
 from utils import CommonUtils
@@ -64,7 +68,7 @@ def parseItemTrend(name):
     print(response.json())
     try:
         if response.json()['status'] == 402:
-            raise Exception("AddFundsException")
+            return "[" + str(datetime.date.today()) + ", " + getPriceViaSteamMarket(name) +"];"
     except KeyError:
         trend = response.json()['median_avg_prices_15days']
         for item in trend:
@@ -72,4 +76,5 @@ def parseItemTrend(name):
             item[1] = round(item[1], 2)
     return CommonUtils.listToStr(trend, '; ')
 
-#parseItemTrend("MAC-10 | Heat (Field-Tested)")
+
+#print(parseItemTrend("MAC-10 | Heat (Field-Tested)"))
