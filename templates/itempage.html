@@ -1,63 +1,114 @@
 {%extends 'base.html'%}
 {%block itempage%}
-  <center>
-    <h1>{{ title }}</h1>
 
-    <canvas id="chart" width="600" height="400"></canvas>
-    <script>
+<div id="itemName">
 
-      // bar chart data
-      var barData = {
-        labels : [
-          {% for item in labels %}
-            "{{ item }}",
-          {% endfor %}
-        ],
+</div>
 
-        datasets : [{
-          fillColor: "rgba(151,187,205,0.2)",
-          strokeColor: "rgba(151,187,205,1)",
-          pointColor: "rgba(151,187,205,1)",
-          pointStrokeColor: "#fff",
-          pointHighlightFill: "#fff",
-          pointHighlightStroke: "rgba(151,187,205,1)",
-          bezierCurve : false,
-          data : [
-	    {% for item in values %}
-              {{ item }},
-            {% endfor %}]
-          }
-	]
-      }
+<div class="d-flex flex-column w-100 text-light itemWrapper">
+    <div class="itemInfoContents itemName">
+        <div class="item">
+            {{ itemName }}
+        </div>
+    </div>
 
-      Chart.defaults.global.animationSteps = 50;
-      Chart.defaults.global.tooltipYPadding = 16;
-      Chart.defaults.global.tooltipCornerRadius = 0;
-      Chart.defaults.global.tooltipTitleFontStyle = "normal";
-      Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
-      Chart.defaults.global.animationEasing = "easeOutBounce";
-      Chart.defaults.global.responsive = false;
-      Chart.defaults.global.scaleLineColor = "black";
-      Chart.defaults.global.scaleFontSize = 16;
 
-      // get bar chart canvas
-      var mychart = document.getElementById("chart").getContext("2d");
+    <div class="d-flex justify-content-center plotInfoWrapper itemInfoContents">
+        <div class="item w-50 d-flex justify-content-center ml-5">
+            <div class='d-flex flex-column'>
+                <div class="p-2">
+                    <p class="text-light">Price trend for past 14 days:</p>
+                </div>
+                <div class="p-2">
+                    <canvas id="chart" width="600" height="400"></canvas>
+                    <script>
 
-      steps = 5
-      max = {{ max }}
-      // draw bar chart
-      var LineChartDemo = new Chart(mychart).Line(barData, {
-        scaleOverride: true,
-        scaleSteps: steps,
-        scaleStepWidth: Math.ceil(max / steps),
-        scaleStartValue: 0,
-        scaleShowVerticalLines: true,
-        scaleShowGridLines : true,
-        barShowStroke : true,
-        scaleShowLabels: true,
-        bezierCurve: false,
-      });
+        // bar chart data
+        var barData = {
+          labels : [
+            {% for item in labels %}
+              "{{ item }}",
+            {% endfor %}
+          ],
 
-    </script>
-  </center>
+          datasets : [{
+            fillColor: "rgba(60,38,45,1)",
+            strokeColor: "rgba(181,50,51,1)",
+            pointColor: "rgba(181,50,51,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            bezierCurve : false,
+            data : [
+          {% for item in values %}
+                {{ item }},
+              {% endfor %}]
+            }
+      ]
+        }
+        Chart.defaults.global.scaleFontColor = "#fff";
+        Chart.defaults.global.animationSteps = 50;
+        Chart.defaults.global.tooltipYPadding = 16;
+        Chart.defaults.global.tooltipCornerRadius = 0;
+        Chart.defaults.global.tooltipTitleFontStyle = "normal";
+        Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+        Chart.defaults.global.animationEasing = "easeOutBounce";
+        Chart.defaults.global.responsive = false;
+        Chart.defaults.global.scaleLineColor = "black";
+        Chart.defaults.global.scaleFontSize = 16;
+
+
+        // get bar chart canvas
+        var mychart = document.getElementById("chart").getContext("2d");
+
+        steps = 5
+        max = {{ max }}
+        // draw bar chart
+        var LineChartDemo = new Chart(mychart).Line(barData, {
+          scaleOverride: true,
+          scaleSteps: steps,
+          scaleStepWidth: Math.ceil(max / steps),
+          scaleStartValue: 0,
+          scaleShowVerticalLines: true,
+          scaleShowGridLines : true,
+          barShowStroke : true,
+          scaleShowLabels: true,
+          bezierCurve: false,
+        });
+
+
+
+
+
+                    </script>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="item w-25 my-auto" style="margin-bottom: 20px;">
+            <div class="fs-6 text-white-50">Current price:
+                <p class="fs-4 text-white"> {{currentPrice}} </p>
+            </div>
+
+            <div class="fs-6 text-white-50">Average price for last two weeks:
+                <p class="fs-4 text-white">
+                    {{ averagePrice |round(2, 'floor')}}
+                </p>
+            </div>
+            <div class="fs-6 text-white-50">Including fee:
+                <p class="fs-4 text-white">
+                    {{ (currentPrice * 0.87) |round(2, 'floor')}}
+                </p>
+            </div>
+            <div class="fs-6 text-white-50 text-center">
+                <form action="{{marketLink}}">
+                    <input class="btn btn-primary mb-2 ml-2" type="submit" value="View on Steam Market"/>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
 {%endblock%}

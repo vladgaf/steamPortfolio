@@ -8,3 +8,43 @@ body{
     width:450px;
     margin-right:5px;
 }
+
+//Стили для table.html
+
+tbody {
+    border-color: #4f4f4f !important;
+}
+
+//Стили для itempage.html
+
+.itemWrapper {
+    padding: 20px;
+    gap: 20px;
+}
+
+.plotInfoWrapper {
+    gap: 20px;
+}
+
+.item {
+    padding: 10px;
+    background: #212529;
+    border-radius: 5px;
+}
+
+.item:first-child {
+    margin-bottom: 20px!important;
+}
+
+.itemInfoContents {
+    margin-left:10px;
+    margin-right:10px;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.itemName{
+    margin-left: 11.5%;
+    margin-right: 11.5%;
+}
+

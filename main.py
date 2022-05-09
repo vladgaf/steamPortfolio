@@ -1,9 +1,11 @@
 import os
+import statistics
 
 from api import InventoryReader
 from api import InventoryParser
 from api import InventoryEditor
 from api import ItemsBaseEditor
+from api import CurrentPriceParser
 from api import TrendsReader
 from utils import Constants
 
@@ -94,8 +96,17 @@ def itemStats(itemName):
         print(price_trend[1])
         bar_labels = price_trend[0]
         bar_values = price_trend[1]
-        print(max(bar_values))
-        return render_template("itempage.html", max=2, title = "PriceGraph", labels=bar_labels, values=bar_values)
+        max_chart_value = max(bar_values)
+        average_price = statistics.mean(bar_values)
+        current_price = price_trend[1][-1]
+        market_link = CurrentPriceParser.generateMarketLink(itemName)
+        print(average_price)
+        return render_template("itempage.html", max=max_chart_value, itemName = itemName, title = "PriceGraph",
+                               labels=bar_labels, values=bar_values, averagePrice = average_price, currentPrice = current_price, marketLink = market_link)
+
+@app.route('/database', methods=['GET', 'POST'])
+def database():
+    return render_template('database.html')
 
 if __name__ == '__main__':
     app.run(debug=True,  host="0.0.0.0", port=8000)

@@ -6,6 +6,10 @@ from utils import Constants
 from utils import CommonUtils
 
 
+def generateMarketLink(market_hash_name):
+    return "https://steamcommunity.com/market/listings/730/" + urllib.parse.quote(market_hash_name)
+
+
 def linkBuilder(market_hash_name):
     market_hash_name = market_hash_name.replace('%E2%98%85', "★")
     market_hash_name = market_hash_name.replace('%E2%84%A2', "™")
