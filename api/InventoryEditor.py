@@ -28,7 +28,9 @@ def refreshInventory(user_id):
             Item.select().where(Item.itemName == str(key)).get()
             #print(Item.select().where(Item.itemName == str(key)))
         except (DoesNotExist, IndexError):
-            Item.createItem(name=key, price=CurrentPriceParser.parseItemPrice(key))
+            Item.createItem(name=key, price=CurrentPriceParser.parseItemPrice(key),
+                            trend=CurrentPriceParser.parseItemTrend(key))
+            #Item.createItem(name=key, price=CurrentPriceParser.parseItemPrice(key), trend="CurrentPriceParser.parseItemTrend(key)")
         finally:
             userItem = UserItem()
             user = User.select(User).where(User.id == user_id).get()

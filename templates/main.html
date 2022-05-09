@@ -4,10 +4,10 @@
     <h1 class="display-5 fw-bold text-light">Поставьте пятерку</h1>
     <div class="col-lg-6 mx-auto">
       <p class="lead mb-4 text-light">Жмайлов Борис Борисович хороший человек и лучший преподаватель</p>
-      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-          <form class="form-inline" action="" method="post">
-            <input class="form-control mb-2" type="text" name="steamLink" placeholder ="Your SteamID">
-            <input class="btn btn-primary mb-2" type = "submit" value="Load" title="Check">
+      <div class="d-grid gap-2 d-flex justify-content-center">
+          <form class="d-flex form-inline mx-sm-3" action="" method="post">
+            <input class="form-control mb-2 mr-6" type="text" name="steamLink" id ="steamIdInput" placeholder ="Your SteamID">
+            <input class="btn btn-primary mb-2 ml-2" type = "submit" value="Load" title="Check">
             {% if message %}
             <p>{{ message }}</p>
             {% endif %}

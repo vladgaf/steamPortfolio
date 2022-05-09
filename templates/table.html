@@ -50,7 +50,7 @@
         </div>
       </div>
 
-<table class="table table-dark">
+<table class="table table-striped table-dark">
   <thead>
     <tr>
         <th scope="col">Name</th>
@@ -108,7 +108,12 @@
            </svg>
            {{ (item["quantity"] * item["currentPrice"] - item["quantity"] * item["boughtPrice"])|round(2, 'floor') }} </td>
        {%endif%}
-       <td><a href="">Details</a> </td>
+       <td>
+           <form id = '{{item["id"]}}' action="" method="post">
+               <input type="hidden" name= "itemName" value='{{ item["itemName"] }}' readonly>
+               <input type="submit" class="btn btn-outline-light me-2" name = "itemDetails" value="Details">
+               </form>
+       </td>
    </tr>
   {%endfor%}
   </tbody>

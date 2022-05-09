@@ -12,4 +12,6 @@ def dropTables():
     User.drop_table()
     UserItem.drop_table()
 
+
+#dropTables()
 createTables()

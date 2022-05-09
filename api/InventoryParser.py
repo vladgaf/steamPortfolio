@@ -20,7 +20,8 @@ def parseUserItems(steam_id64):
         except (DoesNotExist, IndexError):
             item = Item()
             print("Parse exception")
-            item.createItem(item_name, CurrentPriceParser.parseItemPrice(item_name))
+            item.createItem(item_name, CurrentPriceParser.parseItemPrice(item_name), CurrentPriceParser.parseItemTrend(item_name))
+            #item.createItem(item_name, CurrentPriceParser.parseItemPrice(item_name), "CurrentPriceParser.parseItemTrend(item_name)")
         finally:
             userItem = UserItem()
             user = User.select(User).where(User.userProfile == steam_id64).get()

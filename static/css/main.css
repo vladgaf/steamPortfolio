@@ -4,3 +4,7 @@
 body{
     background:#343a40;
 }
+#steamIdInput{
+    width:450px;
+    margin-right:5px;
+}

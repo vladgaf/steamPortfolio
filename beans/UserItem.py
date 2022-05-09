@@ -20,11 +20,7 @@ class UserItem(Model):
         userItem.user = user
         userItem.item = item
         userItem.quantity = quantity
-        userItem.boughtPrice = boughtprice # ограничение notNull он совсем ебанулся?
-        print(user)
-        print(item.itemName)
-        print(quantity)
-        print(boughtprice)
+        userItem.boughtPrice = boughtprice
         userItem.save()
 
         return userItem

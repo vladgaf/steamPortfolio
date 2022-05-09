@@ -3,6 +3,7 @@ import json
 import urllib.parse
 from colorama import Fore, Back, Style
 from utils import Constants
+from utils import CommonUtils
 
 
 def linkBuilder(market_hash_name):
@@ -48,3 +49,23 @@ def parseItemPrice(item_name):
         return getPriceViaSteamApis(item_name)
     except (Exception("AddFundsException"), BaseException):
         return getPriceViaSteamMarket(item_name)
+
+
+
+
+def parseItemTrend(name):
+    link = linkBuilder(name)[1]
+    print(link)
+    response = requests.get(url=link, headers=Constants.HEADERS)
+    print(response.json())
+    try:
+        if response.json()['status'] == 402:
+            raise Exception("AddFundsException")
+    except KeyError:
+        trend = response.json()['median_avg_prices_15days']
+        for item in trend:
+            item.remove(item[2])
+            item[1] = round(item[1], 2)
+    return CommonUtils.listToStr(trend, '; ')
+
+#parseItemTrend("MAC-10 | Heat (Field-Tested)")
