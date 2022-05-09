@@ -19,6 +19,9 @@ from beans.Item import Item
 
 from flask import send_from_directory
 
+import logging
+
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 app = Flask(__name__)
 
@@ -35,7 +38,7 @@ def foo():
     if request.method == 'POST':
         steamLink = request.form.get('steamLink')
         if InventoryReader.validateLink(steamLink):
-            print(steamLink) # запрос к данным формы
+            logging.debug(steamLink) # запрос к данным формы
             steam_id64 = InventoryReader.profileLinkToSteamId64(steamLink)
             return redirect(url_for('usertable', steamID64=steam_id64))
         else:
@@ -47,18 +50,18 @@ def foo():
 def usertable(steamID64):
     user = User.getUserBySteamId64(steamID64)
     if request.method == "GET":
-        #print(type(steamID64))
+        #logging.debug(type(steamID64))
         userItems = UserItem.getUserItems(user.id)
         if not userItems:
-            print("ParsingItems")
+            logging.debug("ParsingItems")
             InventoryParser.parseUserItems(steamID64)
             userItems = UserItem.getUserItems(user.id)
-        #print(*userItems, sep='\n')
+        #logging.debug(*userItems, sep='\n')
         totalInvested = InventoryEditor.getTotalInvested(user.id)
         totalWorthNow = InventoryEditor.getTotalWorthNow(user.id)
         return render_template("table.html", userItems = userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
     if request.method == "POST":
-        print(request.form)
+        logging.debug(request.form)
         if 'refreshInventory' in request.form:
             InventoryEditor.refreshInventory(user.id)
             userItems = UserItem.getUserItems(user.id)
@@ -72,8 +75,8 @@ def usertable(steamID64):
             totalWorthNow = InventoryEditor.getTotalWorthNow(user.id)
             return render_template("table.html", userItems=userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
         elif 'boughtPrice' in request.form:
-            # print("Name:" + request.form.get('itemName'))
-            # print("BP:" + request.form.get('boughtPrice'))
+            # logging.debug("Name:" + request.form.get('itemName'))
+            # logging.debug("BP:" + request.form.get('boughtPrice'))
             user = User.getUserBySteamId64(steamID64)
             item = Item.getItemByName(request.form.get('itemName'))
             bought_price = float(request.form.get('boughtPrice'))
@@ -92,15 +95,15 @@ def usertable(steamID64):
 def itemStats(itemName):
     if request.method == 'GET':
         price_trend = TrendsReader.extractTrendsByName(itemName)
-        print(price_trend[0])
-        print(price_trend[1])
+        logging.debug(price_trend[0])
+        logging.debug(price_trend[1])
         bar_labels = price_trend[0]
         bar_values = price_trend[1]
         max_chart_value = max(bar_values)
         average_price = statistics.mean(bar_values)
         current_price = price_trend[1][-1]
         market_link = CurrentPriceParser.generateMarketLink(itemName)
-        print(average_price)
+        logging.debug(average_price)
         return render_template("itempage.html", max=max_chart_value, itemName = itemName, title = "PriceGraph",
                                labels=bar_labels, values=bar_values, averagePrice = average_price, currentPrice = current_price, marketLink = market_link)
 

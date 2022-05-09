@@ -1,5 +1,6 @@
 import datetime
 
+import logging
 import requests
 import json
 import urllib.parse
@@ -9,6 +10,7 @@ from colorama import Fore, Back, Style
 from utils import Constants
 from utils import CommonUtils
 
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 def generateMarketLink(market_hash_name):
     return "https://steamcommunity.com/market/listings/730/" + urllib.parse.quote(market_hash_name)
@@ -26,29 +28,29 @@ def linkBuilder(market_hash_name):
 
 def getPriceViaSteamMarket(name):
     link = linkBuilder(name)[0]
-    print(link)
+    logging.debug(link)
     response = requests.get(url=link, headers=Constants.HEADERS)
     try:
         return response.json()['lowest_price'][1:].replace(',', '.')
     except KeyError:
-        print(Fore.RED + "Request Error, try again later...")
+        logging.debug(Fore.RED + "Request Error, try again later...")
     except TypeError:
-        print(Fore.RED + "Steam Error 429, try again later...")
+        logging.debug(Fore.RED + "Steam Error 429, try again later...")
     except json.decoder.JSONDecodeError:
-        print(Fore.RED + "Steam is not responding, visit https://steamstat.us/ for check aviability")
+        logging.debug(Fore.RED + "Steam is not responding, visit https://steamstat.us/ for check aviability")
 
 
 def getPriceViaSteamApis(name):
     link = linkBuilder(name)[1]
-    print(link)
+    logging.debug(link)
     response = requests.get(url=link, headers=Constants.HEADERS)
-    print(response.json())
+    logging.debug(response.json())
     try:
         if response.json()['status'] == 402:
             raise Exception("AddFundsException")
     except KeyError:
         price = response.json()['median_avg_prices_15days'][-1][1]
-        print("Item name:" + name + "Item Price" + str(price))
+        logging.debug("Item name:" + name + "Item Price" + str(price))
         return round(price, 2)
 
 
@@ -63,9 +65,9 @@ def parseItemPrice(item_name):
 
 def parseItemTrend(name):
     link = linkBuilder(name)[1]
-    print(link)
+    logging.debug(link)
     response = requests.get(url=link, headers=Constants.HEADERS)
-    print(response.json())
+    logging.debug(response.json())
     try:
         if response.json()['status'] == 402:
             return "[" + str(datetime.date.today()) + ", " + getPriceViaSteamMarket(name) +"];"
@@ -77,4 +79,4 @@ def parseItemTrend(name):
     return CommonUtils.listToStr(trend, '; ')
 
 
-#print(parseItemTrend("MAC-10 | Heat (Field-Tested)"))
+#logging.debug(parseItemTrend("MAC-10 | Heat (Field-Tested)"))

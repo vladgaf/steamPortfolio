@@ -6,7 +6,9 @@ from peewee import fn
 from api import InventoryReader
 from api import CurrentPriceParser
 from api import InventoryParser
+import logging
 
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 def refreshInventory(user_id):
     queryList = UserItem.getUserItems(user_id)
@@ -14,8 +16,8 @@ def refreshInventory(user_id):
     for item in queryList:
         queryDict[item['itemName']] = {"quantity": item['quantity'], "boughtPrice": item['boughtPrice']}
     inventoryDict = InventoryReader.getInventoryArray(User.select(User).where(User.id == user_id).get().userProfile)
-    print(inventoryDict)
-    print(queryDict)
+    logging.debug(inventoryDict)
+    logging.debug(queryDict)
     UserItem.delete().where(UserItem.user == user_id).execute()
 
     for key in inventoryDict.keys():
@@ -26,7 +28,7 @@ def refreshInventory(user_id):
             raw_item = {"quantity": inventoryDict[key], "boughtPrice": 0}
         try:
             Item.select().where(Item.itemName == str(key)).get()
-            #print(Item.select().where(Item.itemName == str(key)))
+            #logging.debug(Item.select().where(Item.itemName == str(key)))
         except (DoesNotExist, IndexError):
             Item.createItem(name=key, price=CurrentPriceParser.parseItemPrice(key),
                             trend=CurrentPriceParser.parseItemTrend(key))

@@ -7,6 +7,8 @@ from colorama import Fore, Back, Style
 from beans.User import User
 from utils import Constants
 
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+
 
 def validateLink(link):
     try:
@@ -25,12 +27,12 @@ def profileLinkToSteamId64(link):
         request_profile = requests.get(url=url_profile, headers=Constants.HEADERS)
         doc = xml_md.parse(io.StringIO(request_profile.content.decode("utf-8")))
         steam_id64 = doc.getElementsByTagName('steamID64')[0].childNodes[0].nodeValue
-        print(steam_id64)
+        logging.debug(steam_id64)
         user = User()
         if not User.select().where(User.userProfile == steam_id64).exists():
             user.createUser(steam_id64)
     except BaseException:
-        print(Fore.RED + "Incorrect link, try again.")
+        logging.debug(Fore.RED + "Incorrect link, try again.")
     return steam_id64
 
 
@@ -47,6 +49,6 @@ def getInventoryArray(steam_id64):
                         itemsList.append(request['descriptions'][k]['market_hash_name'])
 
     itemsArray = dict((x, itemsList.count(x)) for x in set(itemsList))
-    #print(itemsArray)
+    #logging.debug(itemsArray)
     return itemsArray
 

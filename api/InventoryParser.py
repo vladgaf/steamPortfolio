@@ -9,17 +9,20 @@ from colorama import Fore
 from api import InventoryReader
 from api import CurrentPriceParser
 
+import logging
+
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 def parseUserItems(steam_id64):
     #steam_id64 = InventoryReader.profileLinkToSteamId64()
     itemsDict = InventoryReader.getInventoryArray(steam_id64)
     for item_name in itemsDict.keys():
-        #print(item_name)
+        #logging.debug(item_name)
         try:
             Item.select(Item).where(Item.itemName == str(item_name)).get()
         except (DoesNotExist, IndexError):
             item = Item()
-            print("Parse exception")
+            logging.debug("Parse exception")
             item.createItem(item_name, CurrentPriceParser.parseItemPrice(item_name), CurrentPriceParser.parseItemTrend(item_name))
             #item.createItem(item_name, CurrentPriceParser.parseItemPrice(item_name), "CurrentPriceParser.parseItemTrend(item_name)")
         finally:
