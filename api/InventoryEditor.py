@@ -40,11 +40,10 @@ def refreshInventory(user_id):
             UserItem.createUserItem(userItem, user=user, item=item, quantity=raw_item["quantity"], boughtprice=raw_item["boughtPrice"])
 
 def getTotalInvested(user_id):
-    sum = UserItem.select(fn.SUM(UserItem.boughtPrice)).where(UserItem.user == user_id).dicts().get()
+    sum = UserItem.select(fn.SUM(UserItem.boughtPrice * UserItem.quantity)).where(UserItem.user == user_id).dicts().get()
     return sum['sum']
 
 def getTotalWorthNow(user_id):
-    query = UserItem.select(fn.SUM(Item.currentPrice)).join(Item, on=(Item.id == UserItem.item)).where(UserItem.user==user_id).dicts().get()
+    query = UserItem.select(fn.SUM(Item.currentPrice * UserItem.quantity)).join(Item, on=(Item.id == UserItem.item)).where(UserItem.user==user_id).dicts().get()
     return query['sum']
 
-#getTotalWorthNow(1)
