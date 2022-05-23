@@ -18,5 +18,3 @@ def extractTrendsByName(item_name):
         labels.append(label[1 : -1])
         values.append(float(item[1]))
     return labels, values
-
-#print(extractTrendsByName("Souvenir MAC-10 | Palm (Well-Worn)")[0])

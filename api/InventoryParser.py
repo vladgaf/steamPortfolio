@@ -35,7 +35,3 @@ def parseUserItems(steam_id64):
 
     UserPortfolioLog.createUserPortfolioLog(User.getUserBySteamId64(steam_id64), InventoryEditor.getTotalWorthNow(User.getUserBySteamId64(steam_id64).id))
 
-
-
-# InventoryReader.profileLinkToSteamId64("https://steamcommunity.com/profiles/76561198308132032")
-# parseUserItems(76561198308132032)

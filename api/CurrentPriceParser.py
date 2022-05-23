@@ -78,5 +78,3 @@ def parseItemTrend(name):
             item[1] = round(item[1], 2)
     return CommonUtils.listToStr(trend, '; ')
 
-
-#logging.debug(parseItemTrend("MAC-10 | Heat (Field-Tested)"))
