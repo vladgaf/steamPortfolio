@@ -1,6 +1,7 @@
 from beans.Item import Item
 from beans.User import User
 from beans.UserItem import UserItem
+from beans.UserPortfolioLog import UserPortfolioLog
 from peewee import DoesNotExist, JOIN
 from peewee import fn
 from api import InventoryReader
@@ -11,6 +12,7 @@ import logging
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 def refreshInventory(user_id):
+    user = User.select(User).where(User.id == user_id).get()
     queryList = UserItem.getUserItems(user_id)
     queryDict = {}
     for item in queryList:
@@ -35,9 +37,10 @@ def refreshInventory(user_id):
             #Item.createItem(name=key, price=CurrentPriceParser.parseItemPrice(key), trend="CurrentPriceParser.parseItemTrend(key)")
         finally:
             userItem = UserItem()
-            user = User.select(User).where(User.id == user_id).get()
             item = Item.select().where(Item.itemName == str(key)).get()
             UserItem.createUserItem(userItem, user=user, item=item, quantity=raw_item["quantity"], boughtprice=raw_item["boughtPrice"])
+
+    UserPortfolioLog.createUserPortfolioLog(user, getTotalWorthNow(user.id))
 
 def getTotalInvested(user_id):
     sum = UserItem.select(fn.SUM(UserItem.boughtPrice * UserItem.quantity)).where(UserItem.user == user_id).dicts().get()

@@ -28,9 +28,10 @@ def profileLinkToSteamId64(link):
         doc = xml_md.parse(io.StringIO(request_profile.content.decode("utf-8")))
         steam_id64 = doc.getElementsByTagName('steamID64')[0].childNodes[0].nodeValue
         logging.debug(steam_id64)
+        name = doc.getElementsByTagName('steamID')[0].childNodes[0].nodeValue
         user = User()
         if not User.select().where(User.userProfile == steam_id64).exists():
-            user.createUser(steam_id64)
+            user.createUser(steam_id64, name)
     except BaseException:
         logging.debug(Fore.RED + "Incorrect link, try again.")
     return steam_id64

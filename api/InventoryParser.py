@@ -3,11 +3,13 @@ from peewee import DoesNotExist
 from beans.Item import Item
 from beans.User import User
 from beans.UserItem import UserItem
+from beans.UserPortfolioLog import UserPortfolioLog
 
 from colorama import Fore
 
 from api import InventoryReader
 from api import CurrentPriceParser
+from api import InventoryEditor
 
 import logging
 
@@ -30,6 +32,8 @@ def parseUserItems(steam_id64):
             user = User.select(User).where(User.userProfile == steam_id64).get()
             item = Item.select(Item).where(Item.itemName == str(item_name)).get()
             userItem.createUserItem(user, item, itemsDict[item_name], 0.0)
+
+    UserPortfolioLog.createUserPortfolioLog(User.getUserBySteamId64(steam_id64), InventoryEditor.getTotalWorthNow(User.getUserBySteamId64(steam_id64).id))
 
 
 

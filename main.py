@@ -16,6 +16,7 @@ from flask import Flask, render_template, request, url_for, redirect
 from beans.User import User
 from beans.UserItem import UserItem
 from beans.Item import Item
+from beans.UserPortfolioLog import UserPortfolioLog
 
 from flask import send_from_directory
 
@@ -59,7 +60,9 @@ def usertable(steamID64):
         #logging.debug(*userItems, sep='\n')
         totalInvested = InventoryEditor.getTotalInvested(user.id)
         totalWorthNow = InventoryEditor.getTotalWorthNow(user.id)
-        return render_template("table.html", userItems = userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
+        userStats = UserPortfolioLog.getUserPortfolioLogByID(user.id)
+        return render_template("table.html", userItems = userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow, labels=userStats[0], values=userStats[1],
+                               max = totalWorthNow * 1.3)
     if request.method == "POST":
         logging.debug(request.form)
         if 'refreshInventory' in request.form:
