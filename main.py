@@ -33,7 +33,7 @@ def favicon():
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route("/", methods=['post', 'get'])
-def foo():
+def index():
     if request.method == 'GET':
         return render_template("main.html")
     if request.method == 'POST':
@@ -70,13 +70,17 @@ def usertable(steamID64):
             userItems = UserItem.getUserItems(user.id)
             totalInvested = InventoryEditor.getTotalInvested(user.id)
             totalWorthNow = InventoryEditor.getTotalWorthNow(user.id)
-            return render_template("table.html", userItems=userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
+            userStats = UserPortfolioLog.getUserPortfolioLogByID(user.id)
+            return render_template("table.html", userItems=userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow, labels=userStats[0], values=userStats[1],
+                               max = totalWorthNow * 1.3)
         elif 'refreshPrices' in request.form:
             ItemsBaseEditor.refreshAllPrices()
             userItems = UserItem.getUserItems(user.id)
             totalInvested = InventoryEditor.getTotalInvested(user.id)
             totalWorthNow = InventoryEditor.getTotalWorthNow(user.id)
-            return render_template("table.html", userItems=userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
+            userStats = UserPortfolioLog.getUserPortfolioLogByID(user.id)
+            return render_template("table.html", userItems=userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow, labels=userStats[0], values=userStats[1],
+                               max = totalWorthNow * 1.3)
         elif 'boughtPrice' in request.form:
             # logging.debug("Name:" + request.form.get('itemName'))
             # logging.debug("BP:" + request.form.get('boughtPrice'))
@@ -90,6 +94,14 @@ def usertable(steamID64):
             return render_template("table.html", userItems=userItems, totalInvested=totalInvested, totalWorthNow=totalWorthNow)
         elif 'itemDetails' in request.form:
             return redirect(url_for('itemStats', itemName=request.form.get('itemName')))
+        elif 'steamLink' in request.form:
+            steamLink = request.form.get('steamLink')
+            if InventoryReader.validateLink(steamLink):
+                logging.debug(steamLink)  # запрос к данным формы
+                steam_id64 = InventoryReader.profileLinkToSteamId64(steamLink)
+                return redirect(url_for('usertable', steamID64=steam_id64))
+            else:
+                return render_template("main.html", message=Constants.INCORRECT_LINK_MESSAGE)
         else:
             pass
 

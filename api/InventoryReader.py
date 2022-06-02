@@ -16,7 +16,7 @@ def validateLink(link):
         request_profile = requests.get(url=url_profile, headers=Constants.HEADERS)
         doc = xml_md.parse(io.StringIO(request_profile.content.decode("utf-8")))
         steam_id64 = doc.getElementsByTagName('steamID64')[0].childNodes[0].nodeValue
-        return link
+        return True
     except BaseException:
         return False
 
@@ -33,13 +33,14 @@ def profileLinkToSteamId64(link):
         if not User.select().where(User.userProfile == steam_id64).exists():
             user.createUser(steam_id64, name)
     except BaseException:
-        logging.debug(Fore.RED + "Incorrect link, try again.")
+        logging.debug("Incorrect link, try again.")
     return steam_id64
 
 
 def getInventoryArray(steam_id64):
     global itemsList
     url = 'https://steamcommunity.com/inventory/' + str(steam_id64) + '/730/2'
+    print(url)
     request = requests.get(url=url, headers=Constants.HEADERS).json()
     if request is not None or request.json()["success"] is not False:
         itemsList = []
@@ -48,8 +49,7 @@ def getInventoryArray(steam_id64):
                 if request['assets'][i]['classid'] == request['descriptions'][k]['classid']:
                     if request['descriptions'][k]['marketable'] == 1:
                         itemsList.append(request['descriptions'][k]['market_hash_name'])
-
     itemsArray = dict((x, itemsList.count(x)) for x in set(itemsList))
-    #logging.debug(itemsArray)
     return itemsArray
 
+#getInventoryArray(76561198815131412)

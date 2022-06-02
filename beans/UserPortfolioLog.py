@@ -20,9 +20,11 @@ class UserPortfolioLog(Model):
     @staticmethod
     def createUserPortfolioLog(user, totalWorth):
         userPortfolioLog = UserPortfolioLog()
-        try:
-            userPortfolioLog.select().where(user.id == User.id).where(UserPortfolioLog.timestamp == date.today())
-        except DoesNotExist:
+        if UserPortfolioLog.select().where(UserPortfolioLog.user == user,
+                                           UserPortfolioLog.timestamp == str(date.today())).exists():
+            query = UserPortfolioLog.update({"totalWorth": totalWorth}).where(UserPortfolioLog.user == user, UserPortfolioLog.timestamp == str(date.today()))
+            query.execute()
+        else:
             userPortfolioLog.user = user
             userPortfolioLog.totalWorth = totalWorth
             userPortfolioLog.timestamp = date.today()
@@ -38,3 +40,4 @@ class UserPortfolioLog(Model):
             timestamps.append(item['timestamp'])
             values.append(item['totalWorth'])
         return timestamps, values
+

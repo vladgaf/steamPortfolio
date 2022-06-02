@@ -15,6 +15,7 @@ class UserItem(Model):
     class Meta:
         database = pg_db
 
+
     def createUserItem(self, user, item, quantity, boughtprice):
         userItem = UserItem()
         userItem.user = user
@@ -25,11 +26,13 @@ class UserItem(Model):
 
         return userItem
 
+    @staticmethod
     def updateBuyPrice(buy_price, user_id, item_id):
         query = UserItem.update({"boughtPrice": buy_price}).where(UserItem.user == user_id, UserItem.item == item_id)
         print(query.sql)
         return query.execute()
 
+    @staticmethod
     def getUserItems(id):
         try:
             return (UserItem

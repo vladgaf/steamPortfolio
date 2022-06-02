@@ -12,6 +12,7 @@ from utils import CommonUtils
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
+
 def generateMarketLink(market_hash_name):
     return "https://steamcommunity.com/market/listings/730/" + urllib.parse.quote(market_hash_name)
 
@@ -44,7 +45,6 @@ def getPriceViaSteamApis(name):
     link = linkBuilder(name)[1]
     logging.debug(link)
     response = requests.get(url=link, headers=Constants.HEADERS)
-    logging.debug(response.json())
     try:
         if response.json()['status'] == 402:
             raise Exception("AddFundsException")
@@ -59,8 +59,6 @@ def parseItemPrice(item_name):
         return getPriceViaSteamApis(item_name)
     except (Exception("AddFundsException"), BaseException):
         return getPriceViaSteamMarket(item_name)
-
-
 
 
 def parseItemTrend(name):

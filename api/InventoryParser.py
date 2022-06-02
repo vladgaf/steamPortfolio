@@ -19,19 +19,17 @@ def parseUserItems(steam_id64):
     #steam_id64 = InventoryReader.profileLinkToSteamId64()
     itemsDict = InventoryReader.getInventoryArray(steam_id64)
     for item_name in itemsDict.keys():
-        #logging.debug(item_name)
+        logging.debug(item_name)
         try:
             Item.select(Item).where(Item.itemName == str(item_name)).get()
         except (DoesNotExist, IndexError):
             item = Item()
             logging.debug("Parse exception")
             item.createItem(item_name, CurrentPriceParser.parseItemPrice(item_name), CurrentPriceParser.parseItemTrend(item_name))
-            #item.createItem(item_name, CurrentPriceParser.parseItemPrice(item_name), "CurrentPriceParser.parseItemTrend(item_name)")
         finally:
             userItem = UserItem()
             user = User.select(User).where(User.userProfile == steam_id64).get()
             item = Item.select(Item).where(Item.itemName == str(item_name)).get()
             userItem.createUserItem(user, item, itemsDict[item_name], 0.0)
-
     UserPortfolioLog.createUserPortfolioLog(User.getUserBySteamId64(steam_id64), InventoryEditor.getTotalWorthNow(User.getUserBySteamId64(steam_id64).id))
 

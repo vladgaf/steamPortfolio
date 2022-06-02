@@ -11,6 +11,7 @@ import logging
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
+
 def refreshInventory(user_id):
     user = User.select(User).where(User.id == user_id).get()
     queryList = UserItem.getUserItems(user_id)
@@ -30,11 +31,9 @@ def refreshInventory(user_id):
             raw_item = {"quantity": inventoryDict[key], "boughtPrice": 0}
         try:
             Item.select().where(Item.itemName == str(key)).get()
-            #logging.debug(Item.select().where(Item.itemName == str(key)))
         except (DoesNotExist, IndexError):
             Item.createItem(name=key, price=CurrentPriceParser.parseItemPrice(key),
                             trend=CurrentPriceParser.parseItemTrend(key))
-            #Item.createItem(name=key, price=CurrentPriceParser.parseItemPrice(key), trend="CurrentPriceParser.parseItemTrend(key)")
         finally:
             userItem = UserItem()
             item = Item.select().where(Item.itemName == str(key)).get()
